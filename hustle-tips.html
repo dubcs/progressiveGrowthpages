@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hustle Tips | Track Every Shift</title>
+  <meta
+    name="description"
+    content="Hustle Tips helps tipped workers log shifts fast, track earnings, review trends, and export clean reports."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #f6efe4;
+      --bg-strong: #f0dfc5;
+      --surface: rgba(255, 250, 242, 0.78);
+      --surface-strong: #fff8ef;
+      --text: #1f1b16;
+      --muted: #615446;
+      --line: rgba(31, 27, 22, 0.1);
+      --primary: #dd6b20;
+      --primary-deep: #b45309;
+      --accent: #0f766e;
+      --accent-soft: #d7f3ef;
+      --success: #2f855a;
+      --shadow: 0 24px 80px rgba(92, 61, 17, 0.16);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(221, 107, 32, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(15, 118, 110, 0.15), transparent 24%),
+        linear-gradient(180deg, #fffaf3 0%, var(--bg) 46%, #f4ead8 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .shell {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 248, 239, 0.72);
+      border-bottom: 1px solid rgba(31, 27, 22, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      font-size: 1.1rem;
+    }
+
+    .brand-mark {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #f59e0b 55%, var(--accent));
+      box-shadow: 0 14px 30px rgba(221, 107, 32, 0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 0.85rem 1.2rem;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+      box-shadow: 0 12px 24px rgba(180, 83, 9, 0.25);
+    }
+
+    .hero {
+      padding: 4.5rem 0 2rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(31, 27, 22, 0.08);
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.74rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    .stat-value,
+    .phone-title {
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: -0.05em;
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 0.95;
+      max-width: 10ch;
+    }
+
+    .hero-copy p {
+      font-size: 1.18rem;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 34rem;
+      margin: 1.25rem 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.75rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 3.2rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-deep), var(--primary));
+      box-shadow: 0 14px 30px rgba(180, 83, 9, 0.24);
+    }
+
+    .button-secondary {
+      border: 1px solid rgba(31, 27, 22, 0.1);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .hero-notes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .hero-notes span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .phone-wrap {
+      position: relative;
+      min-height: 38rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb,
+    .orb-two {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(8px);
+    }
+
+    .orb {
+      width: 14rem;
+      height: 14rem;
+      background: rgba(221, 107, 32, 0.22);
+      top: 1rem;
+      left: 0;
+    }
+
+    .orb-two {
+      width: 12rem;
+      height: 12rem;
+      background: rgba(15, 118, 110, 0.22);
+      right: 0;
+      bottom: 2rem;
+    }
+
+    .phone {
+      position: relative;
+      width: min(100%, 23rem);
+      border-radius: 2.6rem;
+      padding: 1rem;
+      background: linear-gradient(180deg, #2a2218, #17120d);
+      box-shadow: var(--shadow);
+      transform: rotate(4deg);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 0.7rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35%;
+      height: 1.5rem;
+      border-radius: 0 0 1rem 1rem;
+      background: #0d0906;
+    }
+
+    .phone-screen {
+      border-radius: 2rem;
+      background:
+        radial-gradient(circle at top right, rgba(221, 107, 32, 0.12), transparent 30%),
+        linear-gradient(180deg, #fff9f1 0%, #f7ecdb 100%);
+      padding: 2.2rem 1rem 1rem;
+      overflow: hidden;
+      min-height: 39rem;
+    }
+
+    .phone-card,
+    .metric-card,
+    .feature-card,
+    .quote,
+    .cta-panel,
+    .step {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 14px 40px rgba(73, 49, 19, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .phone-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .phone-title {
+      font-size: 1.4rem;
+    }
+
+    .phone-pill {
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .phone-card {
+      border-radius: 1.5rem;
+      padding: 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .phone-card.top {
+      background: linear-gradient(135deg, rgba(221, 107, 32, 0.95), rgba(245, 158, 11, 0.88));
+      color: #fff;
+      border: none;
+    }
+
+    .phone-label {
+      display: block;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.78;
+      margin-bottom: 0.35rem;
+    }
+
+    .phone-value {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .phone-meta,
+    .list-row small,
+    .feature-card p,
+    .metric-card p,
+    .quote p,
+    .step p,
+    .footer p {
+      color: var(--muted);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 0.4rem;
+    }
+
+    .list-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid rgba(31, 27, 22, 0.08);
+    }
+
+    .list-row:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .list-row strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .trend-up {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .stats {
+      padding: 1.5rem 0 0.5rem;
+    }
+
+    .stats-grid,
+    .features-grid,
+    .steps-grid,
+    .proof-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .metric-card {
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+    }
+
+    .stat-value {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 0.5rem;
+    }
+
+    section {
+      padding: 3.5rem 0;
+    }
+
+    .section-head {
+      max-width: 42rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 0.98;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.65;
+      margin: 0.9rem 0 0;
+    }
+
+    .features-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-card {
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      min-height: 15rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -2.5rem -2.5rem auto;
+      width: 7rem;
+      height: 7rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(221, 107, 32, 0.14), rgba(15, 118, 110, 0.08));
+    }
+
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 1rem;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      background: rgba(255, 255, 255, 0.82);
+      margin-bottom: 1.2rem;
+    }
+
+    .feature-card h3,
+    .step h3,
+    .quote strong {
+      font-size: 1.4rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .workflow {
+      position: relative;
+    }
+
+    .steps-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .step {
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+    }
+
+    .step-index {
+      display: inline-flex;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .proof-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: stretch;
+    }
+
+    .quote,
+    .cta-panel {
+      border-radius: var(--radius-xl);
+      padding: 1.6rem;
+    }
+
+    .quote {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+    }
+
+    .quote p {
+      font-size: 1.12rem;
+      line-height: 1.7;
+      margin: 0 0 1.2rem;
+    }
+
+    .quote footer {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .cta-panel {
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
+        linear-gradient(135deg, #b45309, #dd6b20 52%, #0f766e 100%);
+      color: #fff;
+      border: none;
+      box-shadow: 0 24px 60px rgba(108, 64, 9, 0.28);
+    }
+
+    .cta-panel p,
+    .cta-panel .hero-notes {
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .cta-panel .button-secondary {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .footer {
+      padding: 2rem 0 3.5rem;
+      border-top: 1px solid rgba(31, 27, 22, 0.08);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    }
+
+    .delay-1 { animation-delay: 80ms; }
+    .delay-2 { animation-delay: 160ms; }
+    .delay-3 { animation-delay: 240ms; }
+    .delay-4 { animation-delay: 320ms; }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .proof-grid,
+      .features-grid,
+      .steps-grid,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .phone {
+        transform: none;
+      }
+
+      .phone-wrap {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(calc(100% - 1.25rem), var(--max));
+      }
+
+      .hero {
+        padding-top: 2.5rem;
+      }
+
+      h1 {
+        max-width: none;
+      }
+
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card,
+      .step,
+      .quote,
+      .cta-panel,
+      .metric-card {
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="Hustle Tips home">
+        <span class="brand-mark">$</span>
+        <span>Hustle Tips</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#workflow">How it works</a>
+        <a href="#proof">Why it helps</a>
+      </nav>
+      <a class="nav-cta" href="https://apps.apple.com" target="_blank" rel="noreferrer">Get the app</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Built for tipped workers</div>
+          <h1>Know what every shift is really worth.</h1>
+          <p>
+            Hustle Tips helps servers, bartenders, delivery drivers, and other tipped workers log earnings fast,
+            track hours, spot patterns, and export clean reports without wrestling with spreadsheets.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://apps.apple.com" target="_blank" rel="noreferrer">Download on the App Store</a>
+            <a class="button button-secondary" href="#features">See how it works</a>
+          </div>
+          <div class="hero-notes">
+            <span>Fast tip logging</span>
+            <span>Calendar and trends</span>
+            <span>CSV export</span>
+          </div>
+        </div>
+
+        <div class="phone-wrap reveal delay-2" aria-hidden="true">
+          <div class="orb"></div>
+          <div class="orb-two"></div>
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="phone-header">
+                <div>
+                  <div class="phone-title">Tonight's shift</div>
+                  <div class="phone-meta">Friday, 10:48 PM</div>
+                </div>
+                <div class="phone-pill">Synced</div>
+              </div>
+
+              <div class="phone-card top">
+                <span class="phone-label">Tips logged</span>
+                <div class="phone-value">$186.50</div>
+                <div class="phone-meta">6.5 hours · $28.69 per hour</div>
+              </div>
+
+              <div class="split">
+                <div class="phone-card">
+                  <span class="phone-label">Best day</span>
+                  <div class="phone-value" style="font-size: 1.5rem; color: var(--primary-deep);">Saturday</div>
+                  <div class="phone-meta">$241 average</div>
+                </div>
+                <div class="phone-card">
+                  <span class="phone-label">30 day trend</span>
+                  <div class="phone-value trend-up" style="font-size: 1.5rem;">+12.4%</div>
+                  <div class="phone-meta">vs previous period</div>
+                </div>
+              </div>
+
+              <div class="phone-card">
+                <span class="phone-label">Recent shifts</span>
+                <div class="mini-list">
+                  <div class="list-row">
+                    <div>
+                      <strong>Thu dinner</strong>
+                      <small>5.5h · Patio section</small>
+                    </div>
+                    <strong>$162</strong>
+                  </div>
+                  <div class="list-row">
+                    <div>
+                      <strong>Wed lunch</strong>
+                      <small>4.0h · Rainy day</small>
+                    </div>
+                    <strong>$91</strong>
+                  </div>
+                  <div class="list-row">
+                    <div>
+                      <strong>Tue close</strong>
+                      <small>6.0h · Event crowd</small>
+                    </div>
+                    <strong>$205</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="shell stats-grid">
+        <article class="metric-card reveal delay-1">
+          <div class="stat-value">Seconds</div>
+          <p>Log an amount, hours worked, notes, and photos without slowing down after a long shift.</p>
+        </article>
+        <article class="metric-card reveal delay-2">
+          <div class="stat-value">Per hour</div>
+          <p>See what your shifts are actually paying when you factor in time, not just tip totals.</p>
+        </article>
+        <article class="metric-card reveal delay-3">
+          <div class="stat-value">Clear trends</div>
+          <p>Review best days, streaks, and performance over 7, 30, 90, or all-time ranges.</p>
+        </article>
+        <article class="metric-card reveal delay-4">
+          <div class="stat-value">Export ready</div>
+          <p>Generate CSV exports for personal records, reporting, or monthly review.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2>Everything you need to keep your income visible.</h2>
+          <p>
+            Hustle Tips is designed around the real routine of tipped work: clock out, log fast, review later,
+            and make smarter decisions about when and where you work.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card reveal delay-1">
+            <div class="feature-icon">01</div>
+            <h3>Fast shift logging</h3>
+            <p>Track tip amount, date, hours worked, start and end time, breaks, notes, category, and photos in one flow.</p>
+          </article>
+          <article class="feature-card reveal delay-2">
+            <div class="feature-icon">02</div>
+            <h3>Calendar view</h3>
+            <p>Review your month at a glance, tap any day to log or inspect earnings, and mark scheduled or off days.</p>
+          </article>
+          <article class="feature-card reveal delay-3">
+            <div class="feature-icon">03</div>
+            <h3>Trend insights</h3>
+            <p>Spot your strongest days, track streaks, compare periods, and learn when your work produces the best returns.</p>
+          </article>
+          <article class="feature-card reveal delay-1">
+            <div class="feature-icon">04</div>
+            <h3>History and hourly totals</h3>
+            <p>Filter by today, week, month, or all-time to see total tips, hours, and effective hourly earnings.</p>
+          </article>
+          <article class="feature-card reveal delay-2">
+            <div class="feature-icon">05</div>
+            <h3>Daily reminders</h3>
+            <p>Stay consistent with custom reminder times so you do not forget to capture each shift while it is fresh.</p>
+          </article>
+          <article class="feature-card reveal delay-3">
+            <div class="feature-icon">06</div>
+            <h3>CSV export</h3>
+            <p>Export a clean report for any range, from today to last month to fully custom dates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="workflow">
+      <div class="shell">
+        <div class="section-head reveal">
+          <h2>A simple workflow after every shift.</h2>
+          <p>
+            The app stays focused on a short loop: record what happened, review what it means, and use that data on the next schedule.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step reveal delay-1">
+            <div class="step-index">1</div>
+            <h3>Log it</h3>
+            <p>Enter your tip total, hours, shift notes, and optional photos right after work while the details are still accurate.</p>
+          </article>
+          <article class="step reveal delay-2">
+            <div class="step-index">2</div>
+            <h3>Review it</h3>
+            <p>Use history, calendar, and trend screens to understand patterns in your weekly and monthly earnings.</p>
+          </article>
+          <article class="step reveal delay-3">
+            <div class="step-index">3</div>
+            <h3>Use it</h3>
+            <p>Export reports, compare day performance, and make smarter decisions about shifts, staffing, and routines.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="proof">
+      <div class="shell proof-grid">
+        <article class="quote reveal delay-1">
+          <div>
+            <strong>Why workers keep using it</strong>
+            <p>
+              "I used to guess whether a shift was good. Now I can actually see which days pay off,
+              what my hourly rate looks like, and whether my month is improving. It turned vague income into real numbers."
+            </p>
+          </div>
+          <footer>For servers, bartenders, delivery drivers, and anyone paid in tips</footer>
+        </article>
+
+        <aside class="cta-panel reveal delay-2">
+          <h2>Stop estimating your income.</h2>
+          <p>
+            Track every shift, understand every trend, and keep a cleaner record of the work you already do.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://apps.apple.com" target="_blank" rel="noreferrer">Download now</a>
+            <a class="button button-secondary" href="mailto:hello@example.com">Contact</a>
+          </div>
+          <div class="hero-notes">
+            <span>Private account sync</span>
+            <span>Photo retention controls</span>
+            <span>Custom export ranges</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <div>
+        <div class="brand">
+          <span class="brand-mark">$</span>
+          <span>Hustle Tips</span>
+        </div>
+        <p>Track every shift. Understand every dollar.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#workflow">How it works</a>
+        <a href="https://apps.apple.com" target="_blank" rel="noreferrer">App Store</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
